@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+<file source-language="en" datatype="plaintext" original="messages" date="2015-01-24T13:18:54Z" product-name="sfeventmgt_extend">
+	<header/>
+	<body>
+		<trans-unit id="tx_sfeventmgtextend_domain_model_registration">
+			<source>New Registration Fields</source>
+		</trans-unit>
+		<trans-unit id="tx_sfeventmgtextend_domain_model_registration.bignr">
+			<source>bignr</source>
+		</trans-unit>
+		<trans-unit id="tx_sfeventmgtextend_domain_model_registration.venvnr">
+			<source>venvnr</source>
+		</trans-unit>
+		<trans-unit id="tx_sfeventmgtextend_domain_model_registration.geboorteplaats">
+			<source>geboorteplaats</source>
+		</trans-unit>
+		<trans-unit id="tx_sfeventmgtextend_domain_model_registration.functie">
+			<source>functie</source>
+		</trans-unit>
+		<trans-unit id="tx_sfeventmgtextend_domain_model_registration.factuurnr">
+				<source>factuurnr</source>
+		</trans-unit>
+		<trans-unit id="tx_sfeventmgtextend_domain_model_registration.paymentPrice">
+				<source>paymentPrice</source>
+		</trans-unit>
+	</body>
+</file>
+</xliff>
