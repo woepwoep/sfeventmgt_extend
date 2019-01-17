@@ -18,10 +18,10 @@ $EM_CONF[$_EXTKEY] = array (
 	'uploadfolder' => true,
 	'createDirs' => 'uploads/tx_sfeventmgtextend/i',
 	'clearCacheOnLoad' => 1,
-	'version' => '1.09.07',
+	'version' => '2.01.17',
 	'constraints' => array (
 		'depends' => array (
-			'sf_event_mgt' => '1.8.0-2.99.99',
+			'sf_event_mgt' => '1.8.0-3.99.99',
 		),
 		'conflicts' => array (
 		),

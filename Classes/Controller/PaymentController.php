@@ -43,7 +43,8 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
      *
      * @param \RedSeadog\SfeventmgtExtend\Domain\Repository\RegistrationRepository $registrationRepository
      */
-    public function injectRegistrationRepository(RegistrationRepository $registrationRepository)
+    public function injectRegistrationRepository(
+	\DERHANSEN\SfEventMgt\Domain\Repository\RegistrationRepository $registrationRepository)
     {
         $this->registrationRepository = $registrationRepository;
     }
@@ -148,7 +149,8 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 	 * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Registration $registration
 	 * @return void
 	 */
-	protected function sendEmail(Registration $registration)
+	protected function sendEmail(
+		\DERHANSEN\SfEventMgt\Domain\Model\Registration $registration)
 	{
 		if($registration->getConfirmed()) {
 			$messageType = MessageType::REGISTRATION_CONFIRMED;

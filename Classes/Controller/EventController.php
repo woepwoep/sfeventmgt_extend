@@ -32,7 +32,9 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
      *
      * @return void
      */
-    public function saveRegistrationAction(Registration $registration, Event $event)
+    public function saveRegistrationAction(
+	\DERHANSEN\SfEventMgt\Domain\Model\Registration $registration,
+	\DERHANSEN\SfEventMgt\Domain\Model\Event $event)
     {
         $autoConfirmation = (bool)$this->settings['registration']['autoConfirmation'] || $event->getEnableAutoconfirm();
         $result = RegistrationResult::REGISTRATION_SUCCESSFUL;
@@ -128,24 +130,12 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
     }
 
     /**
-     * Confirms the registration if possible and sends e-mails to admin and user
-     *
-     * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Registration $registration Registration
-     * @param string $hmac HMAC for parameters
-     *
-     * @return void
-     */
-    public function confirmRegistrationAction($registration, $hmac)
-    {
-		debug('confirmRegistration in extend. should not be here. exiting'); exit(1);
-    }
-
-    /**
      * Detail view for an event
      *
      * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Event $event Event
      */
-    public function detailAction(Event $event = null)
+    public function detailAction(
+	\DERHANSEN\SfEventMgt\Domain\Model\Event $event = null)
     {
 		parent::detailAction($event);
     }
