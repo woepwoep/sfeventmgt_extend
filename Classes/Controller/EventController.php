@@ -7,6 +7,7 @@ use \RedSeadog\SfeventmgtExtend\Domain\Model\Registration;
 use \DERHANSEN\SfEventMgt\Utility\MessageType;
 use \DERHANSEN\SfEventMgt\Utility\RegistrationResult;
 
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 /***************************************************************
  *
  *  Copyright notice
@@ -26,19 +27,27 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
     /**
      * Saves the registration
      *
-     * @param $registration \DERHANSEN\SfEventMgt\Domain\Model\Registration
-     * @param $event \DERHANSEN\SfEventMgt\Domain\Model\Event
+     * @param \DERHANSEN\SfEventMgt\Domain\Model\Registration $registration Registration
+     * @param \DERHANSEN\SfEventMgt\Domain\Model\Event $event Event
+     * @validate $registration \DERHANSEN\SfEventMgt\Validation\Validator\RegistrationFieldValidator
      * @validate $registration \RedSeadog\SfeventmgtExtend\Validation\Validator\RegistrationValidator
      *
-     * @return void
+     * @return mixed string|void
      */
     public function saveRegistrationAction(
 	\DERHANSEN\SfEventMgt\Domain\Model\Registration $registration,
-	\DERHANSEN\SfEventMgt\Domain\Model\Event $event)
+	\DERHANSEN\SfEventMgt\Domain\Model\Event $event
+    )
     {
+        if (is_a($event, Event::class) && $this->settings['registration']['checkPidOfEventRecord']) {
+            $event = $this->checkPidOfEventRecord($event);
+        }
+        if (is_null($event) && isset($this->settings['event']['errorHandling'])) {
+            return $this->handleEventNotFoundError($this->settings);
+        }
         $autoConfirmation = (bool)$this->settings['registration']['autoConfirmation'] || $event->getEnableAutoconfirm();
         $result = RegistrationResult::REGISTRATION_SUCCESSFUL;
-        $success = $this->registrationService->checkRegistrationSuccess($event, $registration, $result);
+        list($success, $result) = $this->registrationService->checkRegistrationSuccess($event, $registration, $result);
 
         // Save registration if no errors
         if ($success) {
@@ -60,11 +69,11 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
             $registration->setLanguage($GLOBALS['TSFE']->config['config']['language']);
             $registration->setFeUser($this->registrationService->getCurrentFeUserObject());
             $registration->setWaitlist($isWaitlistRegistration);
-            $registration->_setProperty('_languageUid', $GLOBALS['TSFE']->sys_language_uid);
+            $registration->_setProperty('_languageUid', $this->getSysLanguageUid());
             $this->registrationRepository->add($registration);
 
             // Persist registration, so we have an UID
-            $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager')->persistAll();
+            $this->objectManager->get(PersistenceManager::class)->persistAll();
 
             // Add new registration (or waitlist registration) to event
             if ($isWaitlistRegistration) {
@@ -76,13 +85,24 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
             }
             $this->eventRepository->update($event);
 
+            // Fix event in registration for language other than default language
+            $this->registrationService->fixRegistrationEvent($registration, $event);
+
+            $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterRegistrationSaved', [$registration, $this]);
+
             // Create given amount of registrations if necessary
-            if ($registration->getAmountOfRegistrations() > 1) {
+            $createDependingRegistrations = $registration->getAmountOfRegistrations() > 1;
+            $this->signalDispatch(
+                __CLASS__,
+                __FUNCTION__ . 'BeforeCreateDependingRegistrations',
+                [$registration, &$createDependingRegistrations, $this]
+            );
+            if ($createDependingRegistrations) {
                 $this->registrationService->createDependingRegistrations($registration);
             }
 
-            // Clear cache for configured pages
-            $this->utilityService->clearCacheForConfiguredUids($this->settings);
+            // Flush page cache for event, since new registration has been added
+            $this->eventCacheService->flushEventCache($event->getUid(), $event->getPid());
         }
 
         // Redirect to payment provider if payment/redirect is enabled
@@ -104,7 +124,7 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
             $this->redirectToUri($uri);
         }
 
-		// if no payment redirect 
+	// if no payment redirect 
         if ($autoConfirmation && $success) {
             $this->redirect(
                 'confirmRegistration',
@@ -128,7 +148,6 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
             );
         }
     }
-
     /**
      * Detail view for an event
      *
