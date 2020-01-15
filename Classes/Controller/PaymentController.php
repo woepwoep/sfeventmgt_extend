@@ -112,7 +112,8 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 
 		// send out email no attachments
 		$this->settings['notification']['registrationConfirmed']['attachments']['user']['fromFiles'] = array();
-		$this->sendEmail($registration);
+		//RW 2019-05-09 do not send email on Cancel
+		//RW $this->sendEmail($registration);
 
 		// values to be used in Cancel.html
 		$values['registration'] = $registration;
@@ -139,7 +140,8 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 
 		// send out email
 		$this->settings['notification']['registrationConfirmed']['attachments']['user']['fromFiles'] = array();
-		$this->sendEmail($registration);
+		//RW 2019-05-09 do not send email on Cancel
+		//RW $this->sendEmail($registration);
 
 		// values to be used in Failure.html
 		$values['registration'] = $registration;

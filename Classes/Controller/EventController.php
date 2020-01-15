@@ -26,8 +26,8 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
     /**
      * Saves the registration
      *
-     * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Registration $registration Registration
-     * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Event $event Event
+     * @param $registration \DERHANSEN\SfEventMgt\Domain\Model\Registration
+     * @param $event \DERHANSEN\SfEventMgt\Domain\Model\Event
      * @validate $registration \RedSeadog\SfeventmgtExtend\Validation\Validator\RegistrationValidator
      *
      * @return void
@@ -132,10 +132,9 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
     /**
      * Detail view for an event
      *
-     * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Event $event Event
+     * @param $event \DERHANSEN\SfEventMgt\Domain\Model\Event
      */
-    public function detailAction(
-	\DERHANSEN\SfEventMgt\Domain\Model\Event $event = null)
+    public function detailAction(\DERHANSEN\SfEventMgt\Domain\Model\Event $event = null)
     {
 		parent::detailAction($event);
     }
