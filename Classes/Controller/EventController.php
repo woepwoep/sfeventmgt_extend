@@ -10,6 +10,8 @@ use \DERHANSEN\SfEventMgt\Utility\RegistrationResult;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 /***************************************************************
  *
+ * This file is part of the Extension "sfeventmgt_extend" for TYPO3 CMS.
+ *
  *  Copyright notice
  *
  *  (c) 2017 Ronald Wopereis <woepwoep@gmail.com>
@@ -27,12 +29,10 @@ class EventController extends \DERHANSEN\SfEventMgt\Controller\EventController
     /**
      * Saves the registration
      *
-     * @param \DERHANSEN\SfEventMgt\Domain\Model\Registration $registration Registration
-     * @param \DERHANSEN\SfEventMgt\Domain\Model\Event $event Event
-     * @validate $registration \DERHANSEN\SfEventMgt\Validation\Validator\RegistrationFieldValidator
-     * @validate $registration \RedSeadog\SfeventmgtExtend\Validation\Validator\RegistrationValidator
-     *
-     * @return mixed string|void
+     * @param $registration \DERHANSEN\SfEventMgt\Domain\Model\Registration
+     * @param $event \DERHANSEN\SfEventMgt\Domain\Model\Event
+     * @validate $registration \DERHANSEN\SfEventMgt\Validation\Validator\RegistrationValidator
+     * @return void
      */
     public function saveRegistrationAction(
 	\DERHANSEN\SfEventMgt\Domain\Model\Registration $registration,

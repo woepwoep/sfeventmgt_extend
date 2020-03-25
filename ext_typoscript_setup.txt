@@ -1,0 +1,12 @@
+config.tx_extbase {
+    persistence.classes {
+        RedSeadog\SfeventmgtExtend\Domain\Model\Event {
+            mapping.tableName = tx_sfeventmgt_domain_model_event
+        }
+
+        RedSeadog\SfeventmgtExtend\Domain\Model\Registration {
+            mapping.tableName = tx_sfeventmgt_domain_model_registration
+        }
+    }
+}
+

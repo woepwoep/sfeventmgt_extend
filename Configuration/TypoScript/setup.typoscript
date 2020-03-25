@@ -1,0 +1,22 @@
+#==============================================
+# FE-Plugin configuration
+#==============================================
+plugin.tx_sfeventmgtextend {
+	view {
+		templateRootPaths {
+			0 = EXT:sfeventmgt_extend/Resources/Private/Templates/
+			1 = {$plugin.tx_sfeventmgt.view.templateRootPaths.0}
+			2 = {$plugin.tx_sfeventmgt.view.templateRootPaths.1}
+		}
+		partialRootPaths {
+			0 = EXT:sfeventmgt_extend/Resources/Private/Partials/
+			1 = {$plugin.tx_sfeventmgt.view.partialRootPaths.0}
+			2 = {$plugin.tx_sfeventmgt.view.partialRootPaths.1}
+		}
+		layoutRootPaths {
+			0 = EXT:sfeventmgt_extend/Resources/Private/Layouts/
+			1 = {$plugin.tx_sfeventmgt.view.layoutRootPaths.0}
+			2 = {$plugin.tx_sfeventmgt.view.layoutRootPaths.1}
+		}
+	}
+}

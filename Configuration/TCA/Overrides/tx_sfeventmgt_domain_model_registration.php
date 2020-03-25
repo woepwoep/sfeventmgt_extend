@@ -3,7 +3,8 @@
  * Add extra properties (fields) to the Registration class
  */
 defined('TYPO3_MODE') or die();
-$tempColumns = [
+
+$fields = [
 	'bignr' => [
 		'exclude' => 0,
 		'label' => 'LLL:EXT:sfeventmgt_extend/Resources/Private/Language/locallang_db.xlf:tx_sfeventmgtextend_domain_model_registration.bignr',
@@ -61,9 +62,6 @@ $tempColumns = [
 ];
 
 // add field to tca
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-	'tx_sfeventmgt_domain_model_registration',
-	$tempColumns
-);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tx_sfeventmgt_domain_model_registration', $fields);
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tx_sfeventmgtextend_domain_model_registration','bignr,venvnr,geboorteplaats,functie,factuurnr,payment_price','','after:email');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tx_sfeventmgt_domain_model_registration','bignr,venvnr,geboorteplaats,functie,factuurnr,payment_price','','after:email');

@@ -2,7 +2,7 @@
 # Extended table structure for table 'tx_sfeventmgt_domain_model_registration'
 #
 CREATE TABLE tx_sfeventmgt_domain_model_registration (
-    bignr varchar(30) DEFAULT '' NOT NULL,
+	bignr varchar(30) DEFAULT '' NOT NULL,
 	venvnr varchar(30) DEFAULT '' NOT NULL,
 	geboorteplaats varchar(30) DEFAULT '' NOT NULL,
 	functie varchar(30) DEFAULT '' NOT NULL,

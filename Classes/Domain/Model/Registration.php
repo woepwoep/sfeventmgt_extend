@@ -2,7 +2,7 @@
 namespace RedSeadog\SfeventmgtExtend\Domain\Model;
 
 /*
- * This file is part of the TYPO3 CMS project.
+ * This file is part of the Extension "sfeventmgt_extend" for TYPO3 CMS.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -21,26 +21,54 @@ namespace RedSeadog\SfeventmgtExtend\Domain\Model;
  */
 class Registration extends \DERHANSEN\SfEventMgt\Domain\Model\Registration
 {
-    /** @var string */
+    /**
+     * bignr
+     *
+     * @var string
+     */
     protected $bignr = '';
 
-	/** @var string */
+    /**
+     * venvnr
+     *
+     * @var string
+     */
     protected $venvnr = '';
 
-	/** @var string */
+    /**
+     * geboorteplaats
+     *
+     * @var string
+     */
     protected $geboorteplaats = '';
 
-	/** @var string */
+    /**
+     * functie
+     *
+     * @var string
+     */
     protected $functie = '';
 	
-	/** @var string */
+    /**
+     * factuurnr
+     *
+     * @var string
+     */
     protected $factuurnr = '';
 
-    /** @var float */
+    /**
+     * paymentPrice
+     *
+     * @var float
+     */
     protected $paymentPrice = 0.0;
 
-	/** @var int */
-	protected $crdate;
+    /**
+     * crdate
+     *
+     * @var int
+     */
+    protected $crdate;
 
 
     /** @return string $bignr */
@@ -66,7 +94,7 @@ class Registration extends \DERHANSEN\SfEventMgt\Domain\Model\Registration
     }
 
     /**
-     * @param string $venvnr Venvnr
+     * @param string $venvnr
      * @return void
      */
     public function setVenvnr($venvnr)
@@ -82,7 +110,7 @@ class Registration extends \DERHANSEN\SfEventMgt\Domain\Model\Registration
     }
 
     /**
-     * @param string $geboorteplaats Geboorteplaats
+     * @param string $geboorteplaats
      * @return void
      */
     public function setGeboorteplaats($geboorteplaats)
@@ -97,7 +125,7 @@ class Registration extends \DERHANSEN\SfEventMgt\Domain\Model\Registration
     }
 
     /**
-     * @param string $functie Functie
+     * @param string $functie
      * @return void
      */
     public function setFunctie($functie)
@@ -112,7 +140,7 @@ class Registration extends \DERHANSEN\SfEventMgt\Domain\Model\Registration
     }
 
     /**
-     * @param string $factuurnr Factuurnr
+     * @param string $factuurnr
      * @return void
      */
     public function setFactuurnr($factuurnr)
@@ -127,7 +155,7 @@ class Registration extends \DERHANSEN\SfEventMgt\Domain\Model\Registration
     }
 
     /**
-     * @param float $paymentPrice PaymentPrice
+     * @param float $paymentPrice
      * @return void
      */
     public function setPaymentPrice($paymentPrice)
@@ -151,7 +179,7 @@ class Registration extends \DERHANSEN\SfEventMgt\Domain\Model\Registration
 	/**
 	 * generate invoice name from Factuurnr and RegistrationTimestamp
 	 *
-     * @return void
+	 * @return void
 	 */
 	public function getFactuurNaam()
 	{

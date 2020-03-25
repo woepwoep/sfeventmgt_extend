@@ -2,9 +2,9 @@
 namespace RedSeadog\SfeventmgtExtend\Controller;
 
 use \RedSeadog\SfeventmgtExtend\Domain\Model\Registration;
-use \RedSeadog\SfeventmgtExtend\Domain\Repository\RegistrationRepository;
 use \RedSeadog\SfeventmgtExtend\Service\PdfService;
 use \RedSeadog\SfeventmgtExtend\Service\PluginService;
+use \RedSeadog\SfeventmgtExtend\Service\SqlService;
 
 use \DERHANSEN\SfEventMgt\Service\NotificationService;
 use \DERHANSEN\SfEventMgt\Utility\MessageType;
@@ -31,9 +31,9 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 {
 
     /**
-     * Registration repository
+     * registration repository
      *
-     * @var \RedSeadog\SfeventmgtExtend\Domain\Repository\RegistrationRepository
+     * @var \DERHANSEN\SfEventMgt\Domain\Repository\RegistrationRepository
      */
     protected $registrationRepository = null;
 
@@ -41,13 +41,14 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
     /**
      * DI for registrationRepository
      *
-     * @param \RedSeadog\SfeventmgtExtend\Domain\Repository\RegistrationRepository $registrationRepository
+     * @param \DERHANSEN\SfEventMgt\Domain\Repository\RegistrationRepository $registrationRepository
      */
     public function injectRegistrationRepository(
 	\DERHANSEN\SfEventMgt\Domain\Repository\RegistrationRepository $registrationRepository)
     {
         $this->registrationRepository = $registrationRepository;
     }
+
 
     /**
      * Notification Service
@@ -69,7 +70,9 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 	public function followupSuccessAction(&$values, &$updateRegistration, Registration $registration, $getVars, $pObj)
 	{
 		//
-		$nextFactuurnr = $this->registrationRepository->getNextFactuurnr();
+		$sqlService = new SqlService();
+		$nextFactuurnr = $sqlService->getNextFactuurnr();
+
 		$registration->setFactuurnr($nextFactuurnr);
 		$registration->setPaid(TRUE);
 
@@ -187,11 +190,12 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 	 * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Registration $registration
 	 * @return void
 	 */
-	protected function createInvoice(Registration $registration)
+	protected function joopcreateInvoice(Registration $registration)
 	{
 		$invoiceFileName = $registration->getAbsInvoicePathAndFileName();
 		if (file_exists($invoiceFileName)){
-			debug('createInvoice: file '.$invoiceFileName.' is er al!');
+			$message = sprintf('createInvoice: file '.$invoiceFileName.' is er al!\n');
+			$GLOBALS['BE_USER']->simplelog($message, 'sfeventmgt_extend', error_get_last());
 			exit(1);
 		}
 		$html = $this->getInvoiceHtml($registration);
@@ -201,14 +205,25 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 		$pdfService = new PdfService($html);
 		$nrBytesWritten = file_put_contents($invoiceFileName,$pdfService->output());
 		if ($nrBytesWritten === FALSE) {
-			debug('createInvoice: could not write to file '.$invoiceFileName);
-			debug(error_get_last());
+			$message = sprintf('createInvoice: could not write to file '.$invoiceFileName.'\n');
+			$GLOBALS['BE_USER']->simplelog($message, 'sfeventmgt_extend', error_get_last());
 			exit(1);
 		}
 	}
 
-	protected function getInvoiceHtml(Registration $registration)
+	/**
+	 * @param \RedSeadog\SfeventmgtExtend\Domain\Model\Registration $registration
+	 * @return void
+	 */
+	protected function createInvoice(Registration $registration)
 	{
+		$invoiceFileName = $registration->getAbsInvoicePathAndFileName();
+		if (file_exists($invoiceFileName)){
+			$message = sprintf('createInvoice: file '.$invoiceFileName.' is er al!\n');
+			$GLOBALS['BE_USER']->simplelog($message, 'sfeventmgt_extend', error_get_last());
+			exit(1);
+		}
+
 		/** @var \RedSeadog\SfeventmgtExtend\Service\PluginService */
 		$pluginService = new PluginService('tx_sfeventmgt');
 
@@ -220,10 +235,18 @@ class PaymentController extends \DERHANSEN\SfEventMgt\Controller\PaymentControll
 		$controller = 'Payment';
 		$view->setTemplatePathAndFilename($pluginService->getTemplatePathAndFilename($controller,$templateName));
 
-		$view->assign('registration',$registration);
+		$view->assignMultiple([
+			'registration' => $registration,
+			'invoiceFilename' => $invoiceFilename,
+		]);
 
-		$html = $view->render();
+		$pdf = $view->render(); //return pdf as string, or simply save to file system
 
-		return $html;
+		$nrBytesWritten = file_put_contents($invoiceFileName,$pdf);
+		if ($nrBytesWritten === FALSE) {
+			$message = sprintf('createInvoice: could not write to file '.$invoiceFileName.'\n');
+			$GLOBALS['BE_USER']->simplelog($message, 'sfeventmgt_extend', error_get_last());
+			exit(1);
+		}
 	}
 }

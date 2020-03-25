@@ -11,23 +11,21 @@
 $EM_CONF[$_EXTKEY] = array (
 	'title' => 'MGZT - Scholingen',
 	'description' => 'Uitbreiding sf_event_mgt velden ten behoeve van MGZT',
-	'category' => 'fe',
+	'category' => 'plugin',
 	'author' => 'Ronald Wopereis',
 	'author_email' => 'woepwoep@gmail.com',
 	'state' => 'stable',
 	'uploadfolder' => true,
 	'createDirs' => 'uploads/tx_sfeventmgtextend/i',
 	'clearCacheOnLoad' => 1,
-	'version' => '2.10.01',
-	'constraints' => array (
-		'depends' => array (
+	'version' => '3.01.01',
+	'constraints' => [
+		'depends' => [
 			'sf_event_mgt' => '4.1.2-4.99.99',
-		),
-		'conflicts' => array (
-		),
-		'suggests' => array (
-		),
-	),
+		],
+		'conflicts' => [],
+		'suggests' => [],
+	],
 	'clearcacheonload' => true,
 	'author_company' => 'Red-Seadog',
 );
